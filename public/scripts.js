@@ -11,7 +11,10 @@ async function load() {
 
 async function addUrl({name, url}) {
     await fetch(`http://localhost:3000?name=${name}&url=${url}`)
-            .then(data => data.json()); 
+}
+
+async function removeUrl({name, url}) {
+    await fetch(`http://localhost:3000?name=${name}&url=${url}&del=1`)
 }
 
 load();
@@ -27,7 +30,7 @@ function addElement({ name, url }) {
     a.target = "_blank"
 
     trash.innerHTML = "x"
-    trash.onclick = () => removeElement(trash)
+    trash.onclick = () => removeElement(trash,{ name, url });
 
     li.append(a)
     li.append(trash)
@@ -35,9 +38,10 @@ function addElement({ name, url }) {
 
 }
 
-function removeElement(el) {
+function removeElement(el, { name, url }) {
     if (confirm('Tem certeza que deseja deletar?'))
-        el.parentNode.remove()
+        el.parentNode.remove();
+        removeUrl({name, url});
 }
 
 form.addEventListener("submit", (event) => {
