@@ -1,12 +1,17 @@
-const ul = document.querySelector("ul")
-const input = document.querySelector("input")
-const form = document.querySelector('form')
+const ul = document.querySelector("ul");
+const input = document.querySelector("input");
+const form = document.querySelector('form');
 
 async function load() {
     const res = await fetch('http://localhost:3000')
-                        .then(data => data.json())
+                    .then(data => data.json());
 
     res.urls.map(url => addElement(url));
+}
+
+async function addUrl({name, url}) {
+    await fetch(`http://localhost:3000?name=${name}&url=${url}`)
+            .then(data => data.json()); 
 }
 
 load();
@@ -26,7 +31,8 @@ function addElement({ name, url }) {
 
     li.append(a)
     li.append(trash)
-    ul.append(li)
+    ul.append(li);
+
 }
 
 function removeElement(el) {
@@ -50,7 +56,8 @@ form.addEventListener("submit", (event) => {
     if (!/^http/.test(url))
         return alert("Digite a url da maneira correta")
 
-    addElement({ name, url })
+    addElement({ name, url });
+    addUrl({name, url});
 
     input.value = ""
 })
